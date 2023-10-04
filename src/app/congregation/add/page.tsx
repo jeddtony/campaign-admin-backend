@@ -76,7 +76,7 @@ const MobileResponsiveForm: React.FC = () => {
   };
 
   return (
-    <SideMenu>
+    <SideMenu active='congregations'>
       <h1>Add Congregation</h1>
     <Form
       {...layout}
