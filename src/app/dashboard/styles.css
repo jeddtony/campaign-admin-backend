@@ -1,0 +1,30 @@
+/* styles.css */
+.custom-card {
+    text-align: center;
+    padding: 16px;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    transition: box-shadow 0.3s;
+  
+    &:hover {
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+  }
+  
+  .custom-icon {
+    font-size: 32px;
+    color: #1890ff; /* Blue color for the icon */
+  }
+  
+  .custom-title {
+    margin: 10px 0;
+    font-weight: bold;
+    color: #333; /* Dark grey color for the title */
+  }
+  
+  .custom-value {
+    font-size: 18px;
+    font-weight: bold;
+    color: #188427; /* Custom color for the value */
+  }
+  
