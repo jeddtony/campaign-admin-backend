@@ -1,3 +1,4 @@
+'use client'
 import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, Select, Spin, message } from 'antd';
 import axios from 'axios';
