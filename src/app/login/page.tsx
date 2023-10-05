@@ -22,7 +22,7 @@ const [loading, setLoading] = useState(false);
 useEffect(() => {
     async function fetchCongregations() {
       try {
-        const response = await axios.get('http://localhost:8000/api/congregations');
+        const response = await axios.get('https://test.ecofitnesshub.com/api/congregations');
         setCongregations(response.data.data);
       } catch (error) {
         console.error('Error fetching congregations:', error);

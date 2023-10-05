@@ -1,8 +1,8 @@
 import axios, {AxiosInstance} from "axios";
 import { getToken } from "../helpers/localStorage";
 
-// const apiUrl: string = "https://test.ecofitnesshub.com/api";
-const apiUrl: string = "http://localhost:8000/api";
+const apiUrl: string = "https://test.ecofitnesshub.com/api";
+// const apiUrl: string = "http://localhost:8000/api";
 // const apiUrl: string = "https://b47b-102-89-47-186.ngrok-free.app/api";
 
 let token = getToken();
