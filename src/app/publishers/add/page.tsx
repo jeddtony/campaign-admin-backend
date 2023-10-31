@@ -70,7 +70,7 @@ const MobileResponsiveForm: React.FC = () => {
           });
 
         setTimeout(() => {
-            window.location.replace("/congregation");
+            window.location.replace("/publishers");
         }, 3000);
       }
     }
