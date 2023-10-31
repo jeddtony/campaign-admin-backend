@@ -37,6 +37,40 @@ const instance: AxiosInstance = axios.create({
     headers: loginHeaders,
   });
 
+  instance.interceptors.response.use(
+    function(response) {
+      // let finalResponse = { ...response, status: 200, statusCode: 200 };
+      return response;
+    },
+    function(error) {
+      // //console.log(error.response.status);
+  
+      // //console.log(error.response.data.data.diagnostics.message);
+      if (error?.response?.status === 401 || error?.response?.status === 400) {
+        return redirectToLogin();
+      } else {
+        let finalResponse = {
+          ...error,
+          status: error?.response?.status,
+          statusCode: error?.response?.status,
+        };
+        return finalResponse;
+      }
+      //console.log(error);
+    }
+  );
+
+  function redirectToLogin() {
+    let publicUrl = process.env.PUBLIC_URL?? '';
+    let loginPageUrl = null;
+    loginPageUrl = publicUrl + "/login";
+  
+    let origin = window.location.origin;
+    if (window.location.origin === origin + loginPageUrl) return;
+    window.location.href = loginPageUrl;
+  }
+
+
   export async function login(data: any): Promise<any> {
     const result = await loginInstance.post("/login", data);
     // console.log(result);
