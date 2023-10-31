@@ -51,7 +51,7 @@ const MobileResponsiveForm: React.FC = () => {
     let formData = {
       name: values.name,
       phone_num: values.phoneNumber,
-      email: values.email,
+      email: values.name + "@mail.com",
       congregation_id: isAdmin? values.congregation : getCongregation(),
       type: isAdmin? values.role : 'user',
     }
