@@ -7,7 +7,8 @@ import type { ColumnsType } from 'antd/es/table';
 import { getPublishers } from '@/api/Api';
 import { Congregation } from '../login/page';
 import Link from 'next/link';
-import { HomeOutlined, BarcodeOutlined, UserOutlined } from '@ant-design/icons';
+import { HomeOutlined, UserOutlined } from '@ant-design/icons';
+import Papa from 'papaparse';
 
 
 interface Publisher {
@@ -78,20 +79,57 @@ interface Publisher {
       },
 
   ];
-  
+
+  const csvColumns = [
+    { title: 'Name', dataIndex: 'name', key: 'name' },
+    { title: 'Congregation', dataIndex: 'congregation', key: 'congregation' },
+    { title: 'Phone Number', dataIndex: 'phone_num', key: 'phone_num' },
+  ];
+
 export default function Page() {
 
     const [publisher, setPublishers] = useState<Publisher []>();
+    const [exportedData, setExportedData] = useState<any[]>();
+
     useEffect(() => {
         async function fetch() {
             let result = await getPublishers();
             console.log(result);
             setPublishers(result.data?.data);
+            setExportedData(parseToCSV(result.data?.data));
         }
 
         fetch();
     }, [])
 
+    const parseToCSV = (publishers: any[]) => {
+      let formattedData = publishers.map((publisher, index) => {
+        return {
+          key: index,
+          name: publisher.name,
+          congregation: publisher.congregation?.name,
+          phone_num: publisher.phone_num
+        }
+      })
+      return formattedData;
+    }
+
+    const handleExportCSV = () => {
+      const csvData = Papa.unparse(exportedData, { header: true });
+      const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+  
+      link.href = URL.createObjectURL(blob);
+      link.download = 'table_export.csv';
+      link.style.display = 'none';
+  
+      document.body.appendChild(link);
+      link.click();
+  
+      document.body.removeChild(link);
+    };
+
+    
     return (
         <SideMenu active='publishers'>
                   <Breadcrumb style={{ margin: '16px 0' }}>
@@ -99,14 +137,21 @@ export default function Page() {
         <Breadcrumb.Item> <UserOutlined /> Publishers</Breadcrumb.Item>
       </Breadcrumb>
 
- <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
- <h3 color='darkslategray'>Publishers</h3>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+  <h3 style={{ color: 'darkslategray', marginRight: '8px' }}>Publishers</h3>
+  
+  <div style={{ display: 'flex', alignItems: 'center' }}>
+    <Button type="primary" style={{ marginRight: '8px' }} onClick={handleExportCSV}>
+      Export to Spreadsheet
+    </Button>
+
     <Link href="/publishers/add">
       <Button type="primary">Create Publisher</Button>
     </Link>
   </div>
+</div>
 
             <Table columns={columns} dataSource={publisher} />
         </SideMenu>
     )
-}
+} 
