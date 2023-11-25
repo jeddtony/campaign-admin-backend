@@ -114,7 +114,7 @@ interface DataType {
 export default function Page() {
 
     const [students, setStudents] = useState<DataType[]>();
-    const [exportedData, setExportedData] = useState<any[]>();
+    const [exportedData, setExportedData] = useState<any[]>([]);
 
     useEffect(() => {
         async function fetch() {

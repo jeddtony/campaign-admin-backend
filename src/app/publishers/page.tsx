@@ -89,7 +89,7 @@ interface Publisher {
 export default function Page() {
 
     const [publisher, setPublishers] = useState<Publisher []>();
-    const [exportedData, setExportedData] = useState<any[]>();
+    const [exportedData, setExportedData] = useState<any[]>([]);
 
     useEffect(() => {
         async function fetch() {
