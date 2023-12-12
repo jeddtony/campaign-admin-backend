@@ -104,14 +104,54 @@ export default function Page() {
 
     const parseToCSV = (publishers: any[]) => {
       let formattedData = publishers.map((publisher, index) => {
+        let {
+          totalHours,
+          totalPlacements,
+          totalReturnVisits,
+          totalBibleStudies,
+          totalVideoShowings
+        } = getReportDetails(publisher.reports);
         return {
           key: index,
           name: publisher.name,
           congregation: publisher.congregation?.name,
-          phone_num: publisher.phone_num
+          phone_num: publisher.phone_num,
+          hours: totalHours,
+          placements: totalPlacements,
+          return_visits: totalReturnVisits,
+          bible_studies: totalBibleStudies,
+          video_showings: totalVideoShowings,
         }
       })
       return formattedData;
+    }
+
+    const getReportDetails = (report: any[]) => {
+      const {
+        totalHours,
+        totalPlacements,
+        totalBibleStudies,
+        totalReturnVisits,
+        totalVideoShowings
+      } = report.reduce(
+        (acc, entry) => {
+          acc.totalHours += parseInt(entry.hours, 10) || 0;
+          acc.totalPlacements += parseInt(entry.placements, 10) || 0;
+          acc.totalBibleStudies += parseInt(entry.bible_studies, 10) || 0;
+          acc.totalReturnVisits += parseInt(entry.return_visit, 10) || 0;
+          acc.totalVideoShowings += parseInt(entry.video_showing, 10) || 0;
+          return acc;
+        },
+        {
+          totalHours: 0,
+          totalPlacements: 0,
+          totalBibleStudies: 0,
+          totalReturnVisits: 0,
+          totalVideoShowings: 0
+        }
+      );
+
+      return {totalHours, totalPlacements, totalReturnVisits, totalBibleStudies, totalVideoShowings};
     }
 
     const handleExportCSV = () => {
@@ -120,7 +160,7 @@ export default function Page() {
       const link = document.createElement('a');
   
       link.href = URL.createObjectURL(blob);
-      link.download = 'table_export.csv';
+      link.download = 'publishers_report.csv';
       link.style.display = 'none';
   
       document.body.appendChild(link);
