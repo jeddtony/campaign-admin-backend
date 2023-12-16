@@ -3,7 +3,7 @@
 import React, {useState} from 'react';
 import { Row, Col, Card, Typography, Breadcrumb } from 'antd';
 import { UserOutlined, ClockCircleOutlined, BarcodeOutlined, RotateLeftOutlined, BookOutlined, HomeOutlined,SnippetsOutlined, 
-    VideoCameraOutlined } from '@ant-design/icons';
+    VideoCameraOutlined, ApartmentOutlined } from '@ant-design/icons';
 import './styles.css';
 
 const { Title, Text } = Typography;
@@ -114,7 +114,7 @@ return (
 
         <Col xs={24} sm={12} md={8} lg={6}>
           <Card className="custom-card">
-          <UserOutlined className="custom-icon" />
+          <ApartmentOutlined className="custom-icon" />
             <Title level={4} className="custom-title">
               Contacts
             </Title>
