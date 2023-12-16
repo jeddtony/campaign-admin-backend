@@ -16,12 +16,14 @@ interface Dashboard {
 const DashboardPage: React.FC = () => {
 
     const [dashboard, setDashboard] = useState<Dashboard>();
+    const [student, setStudent] = useState<any>();
 
     useEffect(() => {
         async function fetchStudents() {
             let result = await getDashboard();
             console.log(result);
             setDashboard(result.report);
+            setStudent(result.student);
             console.log('state has been set');
         }
 
@@ -32,7 +34,7 @@ const DashboardPage: React.FC = () => {
     <SideMenu active='dashboard'>
     <div style={{backgroundColor: "transparent"}}>
       {/* <h1>Dashboard</h1> */}
-      <DashboardStats dashboard={dashboard}/>
+      <DashboardStats dashboard={dashboard} students={student}/>
       {/* <DashboardMap /> */}
     </div>
     </SideMenu>
