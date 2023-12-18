@@ -141,6 +141,7 @@ export default function Page() {
           phone_number: contact.phone_number,
           language: contact.preferred_language,
           publication: contact.publication_offered,
+          view_on_map: 'https://www.google.com/maps?q=' + contact.geo_cord
         }
       })
       return formattedData;
@@ -152,7 +153,7 @@ export default function Page() {
       const link = document.createElement('a');
   
       link.href = URL.createObjectURL(blob);
-      link.download = 'table_export.csv';
+      link.download = 'contacts_export.csv';
       link.style.display = 'none';
   
       document.body.appendChild(link);
