@@ -116,6 +116,7 @@ export default function Page() {
           name: publisher.name,
           congregation: publisher.congregation?.name,
           phone_num: publisher.phone_num,
+          account_type: publisher.type,
           hours: totalHours,
           placements: totalPlacements,
           return_visits: totalReturnVisits,
