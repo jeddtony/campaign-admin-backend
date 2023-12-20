@@ -6,6 +6,7 @@ import SideMenu from '../sidemenu';
 import { getExperiences } from '@/api/Api';
 import moment, { now } from 'moment';
 import './styles.css'; 
+import Papa from 'papaparse';
 
 const { Meta } = Card;
 
@@ -13,6 +14,8 @@ export default function Page() {
   const [experiences, setExperiences] = useState<any[]>([]);
   const [selectedExperience, setSelectedExperience] = useState<any | null>(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const [exportedData, setExportedData] = useState<any[]>([]);
 
   useEffect(() => {
     async function fetch() {

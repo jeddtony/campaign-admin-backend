@@ -113,6 +113,14 @@ const SideMenu = ({ children, active }: { children: React.ReactNode, active: str
                     </Menu.Item>
 
                     <Menu.Item
+                    key="map"
+                    icon={<IdcardOutlined />}>
+                        <Link href="/map">
+                        Contacts on Map
+                        </Link>
+                    </Menu.Item>
+
+                    <Menu.Item
                     key="login"
                     icon={<VideoCameraOutlined />}>
                         <Link href="/login">
