@@ -22,6 +22,7 @@ export default function Page() {
       let result = await getExperiences();
       console.log(result);
       setExperiences(result.data.data);
+      setExportedData(parseToCSV(result.data.data));
     }
 
     fetch();
@@ -32,9 +33,47 @@ export default function Page() {
     setIsModalVisible(true);
   };
 
+  const parseToCSV = (experiences: any[]) => {
+    let formattedData = experiences.map((experience, index) => {
+      return {
+        key: index,
+        publisher: experience.user.name,
+        congregation: experience.user.congregation.name,
+        title: experience.title,
+        experience: experience.experiences
+      }
+    });
+    return formattedData;
+  }
+
+  const handleExportCSV = () => {
+    const csvData = Papa.unparse(exportedData, { header: true });
+    const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+
+    link.href = URL.createObjectURL(blob);
+    link.download = 'experiences_export.csv';
+    link.style.display = 'none';
+
+    document.body.appendChild(link);
+    link.click();
+
+    document.body.removeChild(link);
+  };
+
   return (
     <SideMenu active='experiences'>
+      
+
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
       <h1>Experiences/Outstanding Comments</h1>
+  
+  <div style={{ display: 'flex', alignItems: 'center' }}>
+    <Button type="primary" style={{ marginRight: '8px' }} onClick={handleExportCSV}>
+      Export to Spreadsheet
+    </Button>
+  </div>
+</div>
 
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px' }}>
         {experiences.map((post, index) => (
