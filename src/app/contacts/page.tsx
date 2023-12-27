@@ -9,6 +9,7 @@ import { Congregation } from '../login/page';
 import Link from 'next/link';
 import { HomeOutlined, ApartmentOutlined, AimOutlined } from '@ant-design/icons';
 import Papa from 'papaparse';
+import { Contact } from './[id]/page';
 
 interface Publisher {
     name: string,
@@ -26,78 +27,10 @@ interface DataType {
     tags: string[];
   }
 
-  const columns: ColumnsType<DataType> = [
-    {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
-      render: (text) => <a>{text}</a>,
-    },
-    {
-        title: 'Address',
-        dataIndex: 'address',
-        key: 'address',
-        render: (text) => <a>{text}</a>,
-      },
-    {
-      title: 'Publisher',
-      dataIndex: 'added_by',
-      key: 'added_by',
-      render: (addedBy: Publisher) => <span>{addedBy.name}</span>
-    },
-    {
-      title: 'Congregation',
-      dataIndex: 'added_by',
-      key: 'congregation',
-      render: (addedBy: Publisher) => <span>{addedBy.congregation.name}</span>
-    },
-    {
-        title: 'View Details',
-        dataIndex: 'id',
-        key: 'id',
-        render: (id: string) => <Link href={`/contacts/${id}`}> 
-                        <Button type="primary">View</Button>
-                        </Link>
-      },
-      {
-        title: 'View on Map',
-        dataIndex: 'geo_cord',
-        key: 'geo_cord',
-        render: (geo_cord: string) => <Link href={`https://www.google.com/maps?q=${geo_cord}`}>
-                        <Button type="primary" icon={<AimOutlined />} > View on Map</Button>
-                        </Link>
-      },
-    // {
-    //   title: 'Tags',
-    //   key: 'tags',
-    //   dataIndex: 'tags',
-    //   render: (_, { tags }) => (
-    //     <>
-    //       {tags.map((tag) => {
-    //         let color = tag.length > 5 ? 'geekblue' : 'green';
-    //         if (tag === 'loser') {
-    //           color = 'volcano';
-    //         }
-    //         return (
-    //           <Tag color={color} key={tag}>
-    //             {tag.toUpperCase()}
-    //           </Tag>
-    //         );
-    //       })}
-    //     </>
-    //   ),
-    // },
-    // {
-    //   title: 'Action',
-    //   key: 'action',
-    //   render: (_, record) => (
-    //     <Space size="middle">
-    //       <a>Invite {record.name}</a>
-    //       <a>Delete</a>
-    //     </Space>
-    //   ),
-    // },
-  ];
+
+
+
+
 
   const csvColumns = [
     { title: 'Contact Name', dataIndex: 'name', key: 'name' },
@@ -115,6 +48,9 @@ export default function Page() {
 
     const [students, setStudents] = useState<DataType[]>();
     const [exportedData, setExportedData] = useState<any[]>([]);
+    const [originalData, setOriginalData] = useState<DataType[]>();
+    const [nameValue, setNameValue] = useState<string>("");
+    const [pubValue, setPubValue] = useState<string>("");
 
     useEffect(() => {
         async function fetch() {
@@ -122,6 +58,7 @@ export default function Page() {
             console.log(result);
             setStudents(result.data);
             setExportedData(parseToCSV(result.data));
+            setOriginalData(result.data);
         }
 
         fetch();
@@ -162,6 +99,124 @@ export default function Page() {
       document.body.removeChild(link);
     };
 
+    const FilterByNameInput = (<>
+      <strong>Name:</strong>
+        <Input
+          placeholder="Search Name"
+          value={nameValue}
+          onChange={e => {
+            const currValue = e.target.value;
+            setNameValue(currValue);
+
+            let dataToFilter = originalData;
+            if (pubValue != '') {
+              dataToFilter = students;
+            }
+
+            const filteredData = originalData?.filter(entry =>
+              entry.name.toLowerCase().includes(currValue.toLowerCase())
+            );
+            setStudents(filteredData);
+          }}
+        />
+        </>
+      );
+
+      const FilterByPubs = (<>
+        <strong>Publisher:</strong>
+          <Input
+            placeholder="Search Publishers"
+            value={pubValue}
+            onChange={e => {
+              const currValue = e.target.value;
+              setPubValue(currValue);
+              let dataToFilter = originalData;
+              if (nameValue != '') {
+                dataToFilter = students;
+              }
+              const filteredData = dataToFilter?.filter(entry =>
+                entry.added_by.name.toLowerCase().includes(currValue.toLowerCase())
+              );
+              setStudents(filteredData);
+            }}
+          />
+          </>
+        );
+
+    const columns: ColumnsType<DataType> = [
+      {
+        title: FilterByNameInput,
+        dataIndex: 'name',
+        key: 'name',
+        render: (text) => <a>{text}</a>,
+      },
+      {
+          title: 'Address',
+          dataIndex: 'address',
+          key: 'address',
+          render: (text) => <a>{text}</a>,
+        },
+      {
+        title: FilterByPubs,
+        dataIndex: 'added_by',
+        key: 'added_by',
+        render: (addedBy: Publisher) => <span>{addedBy.name}</span>
+      },
+      {
+        title: 'Congregation',
+        dataIndex: 'added_by',
+        key: 'congregation',
+        render: (addedBy: Publisher) => <span>{addedBy.congregation.name}</span>
+      },
+      {
+          title: 'View Details',
+          dataIndex: 'id',
+          key: 'id',
+          render: (id: string) => <Link href={`/contacts/${id}`}> 
+                          <Button type="primary">View</Button>
+                          </Link>
+        },
+        {
+          title: 'View on Map',
+          dataIndex: 'geo_cord',
+          key: 'geo_cord',
+          render: (geo_cord: string) => <Link href={`https://www.google.com/maps?q=${geo_cord}`}>
+                          <Button type="primary" icon={<AimOutlined />} > View on Map</Button>
+                          </Link>
+        },
+      // {
+      //   title: 'Tags',
+      //   key: 'tags',
+      //   dataIndex: 'tags',
+      //   render: (_, { tags }) => (
+      //     <>
+      //       {tags.map((tag) => {
+      //         let color = tag.length > 5 ? 'geekblue' : 'green';
+      //         if (tag === 'loser') {
+      //           color = 'volcano';
+      //         }
+      //         return (
+      //           <Tag color={color} key={tag}>
+      //             {tag.toUpperCase()}
+      //           </Tag>
+      //         );
+      //       })}
+      //     </>
+      //   ),
+      // },
+      // {
+      //   title: 'Action',
+      //   key: 'action',
+      //   render: (_, record) => (
+      //     <Space size="middle">
+      //       <a>Invite {record.name}</a>
+      //       <a>Delete</a>
+      //     </Space>
+      //   ),
+      // },
+    ];
+
+    
     return (
         <SideMenu active='contacts'>
                   
