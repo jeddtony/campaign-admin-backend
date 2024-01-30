@@ -95,7 +95,7 @@ return (
               Congregations
             </Title>
             <Text strong className="custom-value">
-              4
+              10
             </Text>
           </Card>
         </Col>
@@ -107,7 +107,7 @@ return (
               Publishers
             </Title>
             <Text strong className="custom-value">
-              444
+              124
             </Text>
           </Card>
         </Col>
